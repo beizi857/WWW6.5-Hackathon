@@ -211,6 +211,11 @@ export default function ReviewPage() {
     try {
       const { cidBytes32 } = await uploadReview(reviewText.trim());
 
+      // 转换为 bytes32 格式 (0x... 格式)
+      const cidBytes = cidBytes32.startsWith("0x")
+        ? cidBytes32 as `0x${string}`
+        : `0x${cidBytes32}` as `0x${string}`;
+
       writeContract({
         address: reviewContractAddress,
         abi: reviewContractAbi,
@@ -221,7 +226,7 @@ export default function ReviewPage() {
           targetType,
           overallScore,
           dimScores,
-          cidBytes32,
+          cidBytes,
         ],
       });
     } catch (err) {
